@@ -20,6 +20,14 @@ int main(int argc, char** argv) {
     std::string input((std::istreambuf_iterator<char>(file)),
                       (std::istreambuf_iterator<char>()));
 
+    {
+        // Convert tabs
+        int pos;
+        while ((pos = input.find("\t")) != std::string::npos) {
+            input[pos] = ' ';
+        }
+    }
+
     auto lines = split(input, "\n");
 
     Labels::labels labels = Labels::calculate_labels(lines);
@@ -32,6 +40,12 @@ int main(int argc, char** argv) {
 
     int current_address = 0;
     for (auto line = lines.begin(); line != lines.end(); ++line) {
+        // Comment line
+        if (line->rfind("#", 0) == 0) {
+            std::cout << *line << std::endl;
+            continue;
+        }
+
         auto tokens = split(*line, " ");
         if (tokens.size() == 1) {
             // Skip empty lines
@@ -56,11 +70,7 @@ int main(int argc, char** argv) {
                 break;
         }
 
-        // Comment line
-        if (line->rfind("#", 0) == 0) {
-            std::cout << *line << std::endl;
-            continue;
-        } else if (op.rfind(".", 0) == 0) {
+        if (op.rfind(".", 0) == 0) {
             if (tokens[1] == ".dfill") {
                 long int val = get_immd(labels, tokens[2]);
                 int left = val >> 8 & 0xffffffff;
