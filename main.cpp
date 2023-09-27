@@ -17,7 +17,7 @@ loop dadd r1 r1 r3\n\
  daddi r3 r3 1\n\
  beq r3 r2 end\n\
  j loop\n\
- halt\n\
+end halt\n\
 sum .dfill 0\n\
 ten .dfill 10\n\
 ";
@@ -28,6 +28,7 @@ ten .dfill 10\n\
     for (const auto& [k, v] : labels)
         std::cout << "m[" << k << "] = (" << v << ") " << std::endl;
 
+    int current_address = 0;
     for (auto line = lines.begin(); line != lines.end(); ++line) {
         auto tokens = split(*line, " ");
         auto op = tokens[1];
@@ -38,13 +39,13 @@ ten .dfill 10\n\
         int operands = 0x0000;
         switch (instr_type) {
             case I_TYPE:
-                operands = get_itype(tokens);
+                operands = get_itype(labels, current_address, tokens);
                 break;
             case R_TYPE:
-                operands = get_rtype(tokens);
+                operands = get_rtype(labels, tokens);
                 break;
             case J_TYPE:
-                operands = get_jtype(tokens);
+                operands = get_jtype(labels, tokens);
                 break;
         }
 
@@ -56,12 +57,14 @@ ten .dfill 10\n\
                 printf("%08x", right);
                 std::cout << " #" << *line << std::endl;
                 printf("%08x\n", left);
+                current_address += 8;
             }
         } else {
             auto instruction = opcode_int << 26 | operands;
 
             printf("%08x", instruction);
             std::cout << " #" << *line << std::endl;
+            current_address += 4;
         }
     }
     return 0;
