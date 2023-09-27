@@ -3,7 +3,7 @@
 #include <vector>
 
 int get_register(std::string reg) {
-    if (reg.rfind("r", 0) == 0) {
+    if (reg.rfind("r", 0) == 0 || reg.rfind("f", 0) == 0) {
         return std::stoi(reg.substr(1));
     }
     return 0;
