@@ -43,24 +43,31 @@ ten .dfill 10\n\
         int operands = 0x0000;
         switch (instr_type) {
             case I_TYPE:
-                get_itype(tokens);
+                operands = get_itype(tokens);
                 break;
             case R_TYPE:
-                get_rtype(tokens);
+                operands = get_rtype(tokens);
                 break;
             case J_TYPE:
-                get_jtype(tokens);
+                operands = get_jtype(tokens);
                 break;
         }
 
         if (op.rfind(".", 0) == 0) {
-            printf("assembler directive: ");
+            if (tokens[1] == ".dfill") {
+                long int val = std::stol(tokens[2]);
+                int left = val >> 8 & 0xffffffff;
+                int right = val & 0xffffffff;
+                printf("%08x", right);
+                std::cout << " #" << *line << std::endl;
+                printf("%08x\n", left);
+            }
         } else {
             auto instruction = opcode_int << 26 | operands;
 
             printf("%08x", instruction);
+            std::cout << " #" << *line << std::endl;
         }
-        std::cout << " #" << *line << std::endl;
     }
     return 0;
 }
