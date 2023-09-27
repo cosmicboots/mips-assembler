@@ -2,7 +2,7 @@
 #include <string>
 #include <tuple>
 
-std::tuple<int, int, int> opcode_of_str(std::string opcode) {
+Opcode::opcode Opcode::opcode_of_str(std::string opcode) {
     if (opcode == "ld") {
         return std::make_tuple(55, 0, I_TYPE);
     }

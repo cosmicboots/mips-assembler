@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include "utils.h"
+#include "labels.h"
 
-std::map<std::string, int> calculate_labels(std::vector<std::string> lines) {
+Labels::labels Labels::calculate_labels(std::vector<std::string> lines) {
     auto labels = std::map<std::string, int>();
     int cur_address = 0;
     for (auto line = lines.begin(); line != lines.end(); ++line) {

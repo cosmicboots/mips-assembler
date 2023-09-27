@@ -1,3 +1,4 @@
+#include "operands.h"
 #include <sys/types.h>
 #include <charconv>
 #include <cstdio>
@@ -6,12 +7,13 @@
 #include <string>
 #include <variant>
 #include <vector>
+#include "labels.h"
 #include "opcode.h"
 #include "utils.h"
 
-int get_itype(std::map<std::string, int> labels,
-              int current_address,
-              std::vector<std::string> operands) {
+int Operands::get_itype(Labels::labels labels,
+                        int current_address,
+                        std::vector<std::string> operands) {
     int rt;
     int immd;
     int rs;
@@ -34,8 +36,8 @@ int get_itype(std::map<std::string, int> labels,
     return rt << 16 | rs << 21 | immd;
 }
 
-int get_rtype(std::vector<std::string> operands) {
-    auto op = opcode_of_str(operands[1]);
+int Operands::get_rtype(std::vector<std::string> operands) {
+    auto op = Opcode::opcode_of_str(operands[1]);
     auto funct_code = std::get<1>(op);
     auto rd = get_register(operands[2]);
     auto rs = get_register(operands[3]);
@@ -45,13 +47,14 @@ int get_rtype(std::vector<std::string> operands) {
     return rs << 21 | rt << 16 | rd << 11 | funct_code;
 }
 
-int get_jtype(std::map<std::string, int> labels,
-              std::vector<std::string> operands) {
+int Operands::get_jtype(Labels::labels labels,
+                        int current_address,
+                        std::vector<std::string> operands) {
     int offset;
     if (operands[1] == "halt" || operands[1] == "nop") {
         offset = 0;
     } else {
-        offset = get_immd(labels, operands[2]);
+        offset = (get_immd(labels, operands[2]) - current_address) & 0x2ffffff;
     }
     return offset;
 }
