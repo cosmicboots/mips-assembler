@@ -24,16 +24,17 @@ int Operands::get_itype(Labels::labels labels,
         immd = get_immd(labels, operands[3]);
         rs = get_register(operands[4]);
     } else if (operands[1] == "daddi" || operands[1] == "daddiu" ||
-               operands[1] == "beq") {
+               operands[1] == "beq" || operands[1] == "bne") {
         rt = get_register(operands[2]);
         rs = get_register(operands[3]);
         immd = get_immd(labels, operands[4]);
-        if (operands[1] == "beq") {
-            immd -= current_address + 7;
+        if (operands[1] == "beq" || operands[1] == "bne") {
+            immd -= current_address + 4;
+            immd /= 4;
         }
     }
 
-    return rt << 16 | rs << 21 | immd;
+    return (rt & 0x1f) << 16 | (rs & 0x1f) << 21 | (immd & 0xffff);
 }
 
 int Operands::get_rtype(std::vector<std::string> operands) {
