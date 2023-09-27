@@ -32,9 +32,9 @@ ten .dfill 10\n\
     for (auto line = lines.begin(); line != lines.end(); ++line) {
         auto tokens = split(*line, " ");
         auto op = tokens[1];
-        std::tuple<int, int> opcode = opcode_of_str(op);
+        std::tuple<int, int, int> opcode = opcode_of_str(op);
         int opcode_int = std::get<0>(opcode);
-        auto instr_type = std::get<1>(opcode);
+        auto instr_type = std::get<2>(opcode);
 
         int operands = 0x0000;
         switch (instr_type) {
@@ -42,7 +42,7 @@ ten .dfill 10\n\
                 operands = get_itype(labels, current_address, tokens);
                 break;
             case R_TYPE:
-                operands = get_rtype(labels, tokens);
+                operands = get_rtype(tokens);
                 break;
             case J_TYPE:
                 operands = get_jtype(labels, tokens);

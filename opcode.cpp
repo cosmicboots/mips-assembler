@@ -1,61 +1,61 @@
+#include "opcode.h"
 #include <string>
 #include <tuple>
-#include "opcode.h"
 
-std::tuple<int, int> opcode_of_str(std::string opcode) {
+std::tuple<int, int, int> opcode_of_str(std::string opcode) {
     if (opcode == "ld") {
-        return std::make_tuple(55, I_TYPE);
+        return std::make_tuple(55, 0, I_TYPE);
     }
     if (opcode == "l.d") {
-        return std::make_tuple(53, I_TYPE);
+        return std::make_tuple(53, 0, I_TYPE);
     }
     if (opcode == "sd") {
-        return std::make_tuple(63, I_TYPE);
+        return std::make_tuple(63, 0, I_TYPE);
     }
     if (opcode == "s.d") {
-        return std::make_tuple(61, I_TYPE);
+        return std::make_tuple(61, 0, I_TYPE);
     }
     if (opcode == "daddi") {
-        return std::make_tuple(24, I_TYPE);
+        return std::make_tuple(24, 0, I_TYPE);
     }
     if (opcode == "daddiu") {
-        return std::make_tuple(25, I_TYPE);
+        return std::make_tuple(25, 0, I_TYPE);
     }
     if (opcode == "beq") {
-        return std::make_tuple(4, I_TYPE);
+        return std::make_tuple(4, 0, I_TYPE);
     }
     if (opcode == "bne") {
-        return std::make_tuple(5, I_TYPE);
+        return std::make_tuple(5, 0, I_TYPE);
     }
     if (opcode == "dadd") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 44, R_TYPE);
     }
     if (opcode == "dsub") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 46, R_TYPE);
     }
     if (opcode == "add.d") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 47, R_TYPE);
     }
     if (opcode == "sub.d") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 48, R_TYPE);
     }
     if (opcode == "mul.d") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 49, R_TYPE);
     }
     if (opcode == "div.d") {
-        return std::make_tuple(0, R_TYPE);
+        return std::make_tuple(0, 50, R_TYPE);
     }
     if (opcode == "j") {
-        return std::make_tuple(2, J_TYPE);
+        return std::make_tuple(2, 0, J_TYPE);
     }
     if (opcode == "halt") {
-        return std::make_tuple(1, J_TYPE);
+        return std::make_tuple(1, 0, J_TYPE);
     }
     if (opcode == "nop") {
-        return std::make_tuple(3, J_TYPE);
+        return std::make_tuple(3, 0, J_TYPE);
     }
     if (opcode == "dump") {
-        return std::make_tuple(44, J_TYPE);
+        return std::make_tuple(44, 0, J_TYPE);
     }
-    return std::make_tuple(-1, -1);
+    return std::make_tuple(-1, -1, -1);
 }
