@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <iterator>
 #include <ostream>
@@ -9,19 +11,15 @@
 #include "operands.h"
 #include "utils.h"
 
-int main() {
-    std::string input =
-        " ld r1 sum r0\n\
- ld r2 ten r0\n\
- daddi r3 r0 0\n\
-loop dadd r1 r1 r3\n\
- daddi r3 r3 1\n\
- beq r3 r2 end\n\
- j loop\n\
-end halt\n\
-sum .dfill 0\n\
-ten .dfill 10\n\
-";
+int main(int argc, char** argv) {
+    if (argc <= 1) {
+        std::cerr << "Pass in a filename" << std::endl;
+        exit(1);
+    }
+    auto file = std::ifstream(argv[1]);
+    std::string input((std::istreambuf_iterator<char>(file)),
+                      (std::istreambuf_iterator<char>()));
+
     auto lines = split(input, "\n");
 
     Labels::labels labels = Labels::calculate_labels(lines);

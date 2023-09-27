@@ -13,7 +13,7 @@ build: $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(BUILD)/main
 
 run: build $(BUILD)/main
-	@./$(BUILD)/main
+	@./$(BUILD)/main example.asm
 
 fmt:
 	clang-format -i $(SOURCES)
