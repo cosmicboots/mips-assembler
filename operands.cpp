@@ -7,24 +7,7 @@
 #include <variant>
 #include <vector>
 #include "opcode.h"
-
-int get_register(std::string reg) {
-    if (reg.rfind("r", 0) == 0) {
-        return std::stoi(reg.substr(1));
-    }
-    return 0;
-}
-
-int get_immd(std::map<std::string, int> labels, std::string immd) {
-    int ret = 0;
-    if (labels.find(immd) == labels.end()) {
-        // Label not found
-        ret = std::stoi(immd);
-    } else {
-        ret = labels[immd];
-    }
-    return ret;
-}
+#include "utils.h"
 
 int get_itype(std::map<std::string, int> labels,
               int current_address,

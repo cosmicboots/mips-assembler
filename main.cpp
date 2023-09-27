@@ -25,8 +25,8 @@ ten .dfill 10\n\
 
     auto labels = calculate_labels(lines);
 
-    for (const auto& [k, v] : labels)
-        std::cout << "m[" << k << "] = (" << v << ") " << std::endl;
+    //for (const auto& [k, v] : labels)
+    //    std::cout << "m[" << k << "] = (" << v << ") " << std::endl;
 
     int current_address = 0;
     for (auto line = lines.begin(); line != lines.end(); ++line) {
@@ -51,7 +51,7 @@ ten .dfill 10\n\
 
         if (op.rfind(".", 0) == 0) {
             if (tokens[1] == ".dfill") {
-                long int val = std::stol(tokens[2]);
+                long int val = get_immd(labels, tokens[2]);
                 int left = val >> 8 & 0xffffffff;
                 int right = val & 0xffffffff;
                 printf("%08x", right);

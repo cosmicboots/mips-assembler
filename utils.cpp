@@ -1,5 +1,24 @@
+#include <map>
 #include <string>
 #include <vector>
+
+int get_register(std::string reg) {
+    if (reg.rfind("r", 0) == 0) {
+        return std::stoi(reg.substr(1));
+    }
+    return 0;
+}
+
+int get_immd(std::map<std::string, int> labels, std::string immd) {
+    int ret = 0;
+    if (labels.find(immd) == labels.end()) {
+        // Label not found
+        ret = std::stoi(immd);
+    } else {
+        ret = labels[immd];
+    }
+    return ret;
+}
 
 std::vector<std::string> split(std::string input, std::string delimiter) {
     input = input + " ";
