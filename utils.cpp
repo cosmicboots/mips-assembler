@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
@@ -31,4 +32,15 @@ std::vector<std::string> split(std::string input, std::string delimiter) {
         input.erase(0, pos + delimiter.length());
     }
     return res;
+}
+
+bool bothAreSpaces(char lhs, char rhs) {
+    return (lhs == rhs) && (lhs == ' ');
+}
+
+std::string removeDoubleSpace(std::string input) {
+    std::string::iterator new_end =
+        std::unique(input.begin(), input.end(), bothAreSpaces);
+    input.erase(new_end, input.end());
+    return input;
 }

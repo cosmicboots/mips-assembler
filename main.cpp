@@ -26,6 +26,7 @@ int main(int argc, char** argv) {
         while ((pos = input.find("\t")) != std::string::npos) {
             input[pos] = ' ';
         }
+        input = removeDoubleSpace(input);
     }
 
     auto lines = split(input, "\n");
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
     for (auto line = lines.begin(); line != lines.end(); ++line) {
         // Comment line
         if (line->rfind("#", 0) == 0) {
-            std::cout << *line << std::endl;
+            std::cerr << *line << std::endl;
             continue;
         }
 
