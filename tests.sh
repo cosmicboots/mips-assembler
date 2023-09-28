@@ -14,7 +14,7 @@ else
     do
         src="$(dirname $test)/$(basename "$test" ".hex").asm"
         echo " |=== Checking: [$src] ===|"
-        difft --exit-code <(./build/main "$src" | awk '{print $1}') <(awk '{print $1}' "$test")
+        difft --exit-code <(./build/main "$src" 2>/dev/null | awk '{print $1}') <(awk '{print $1}' "$test")
         if [[ $? -ne 0 ]]
         then
             #exit 1
