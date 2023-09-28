@@ -59,7 +59,7 @@ int Operands::get_jtype(Labels::labels labels,
     } else if (operands[1] == "dump") {
         offset = get_immd(labels, operands[2]);
     } else {
-        if (labels.find(operands[4]) != labels.end()) {
+        if (labels.find(operands[2]) != labels.end()) {
             offset = get_immd(labels, operands[2]) >> 2;
         } else {
             offset = get_immd(labels, operands[2]);
