@@ -1,4 +1,7 @@
 #include "opcode.h"
+#include <assert.h>
+#include <iostream>
+#include <ostream>
 #include <string>
 #include <tuple>
 
@@ -57,5 +60,6 @@ Opcode::opcode Opcode::opcode_of_str(std::string opcode) {
     if (opcode == "dump") {
         return std::make_tuple(44, 0, J_TYPE);
     }
-    return std::make_tuple(-1, -1, -1);
+    std::cerr << opcode << std::endl;
+    assert(false);
 }

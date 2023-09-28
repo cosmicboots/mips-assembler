@@ -1,11 +1,16 @@
+#include <assert.h>
 #include <algorithm>
+#include <iostream>
 #include <map>
+#include <regex>
 #include <string>
 #include <vector>
 
 int get_register(std::string reg) {
     if (reg.rfind("r", 0) == 0 || reg.rfind("f", 0) == 0) {
-        return std::stoi(reg.substr(1));
+        int x = std::stoi(reg.substr(1));
+        assert(x >= 0 && x < 32);
+        return x;
     }
     return 0;
 }
@@ -14,6 +19,8 @@ int get_immd(std::map<std::string, int> labels, std::string immd) {
     int ret = 0;
     if (labels.find(immd) == labels.end()) {
         // Label not found
+        std::regex m("^-?[0-9]+$");
+        assert(std::regex_match(immd, m));
         ret = std::stoi(immd);
     } else {
         ret = labels[immd];

@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -21,6 +22,8 @@ int main(int argc, char** argv) {
     auto file = std::ifstream(argv[1]);
     std::string input((std::istreambuf_iterator<char>(file)),
                       (std::istreambuf_iterator<char>()));
+
+    std::vector<std::string> output;
 
     {
         // Convert tabs
@@ -56,22 +59,6 @@ int main(int argc, char** argv) {
             continue;
         }
         auto op = tokens[1];
-        Opcode::opcode opcode = Opcode::opcode_of_str(op);
-        int opcode_int = std::get<0>(opcode);
-        auto instr_type = std::get<2>(opcode);
-
-        int operands = 0x0000;
-        switch (instr_type) {
-            case I_TYPE:
-                operands = Operands::get_itype(labels, current_address, tokens);
-                break;
-            case R_TYPE:
-                operands = Operands::get_rtype(tokens);
-                break;
-            case J_TYPE:
-                operands = Operands::get_jtype(labels, current_address, tokens);
-                break;
-        }
 
         if (op.rfind(".", 0) == 0) {
             if (tokens[1] == ".dfill") {
@@ -86,20 +73,43 @@ int main(int argc, char** argv) {
                 unsigned int right = val & 0xffffffff;
                 if (current_address % 8 != 0) {
                     current_address += 4;
-                    printf("%08x\n", 0);
+                    output.push_back(std::format("{:08x}\n", 0));
                 }
-                printf("%08x", right);
-                std::cout << " #" << *line << std::endl;
-                printf("%08x\n", left);
+                output.push_back(std::format("{:08x}", right));
+                output.push_back(std::format(" #{}\n", *line));
+                output.push_back(std::format("{:08x}\n", left));
                 current_address += 8;
             }
         } else {
-            auto instruction = opcode_int << 26 | operands;
+            Opcode::opcode opcode = Opcode::opcode_of_str(op);
+            int opcode_int = std::get<0>(opcode);
+            auto instr_type = std::get<2>(opcode);
 
-            printf("%08x", instruction);
-            std::cout << " #" << *line << std::endl;
+            int operands = 0x0000;
+            switch (instr_type) {
+                case I_TYPE:
+                    operands =
+                        Operands::get_itype(labels, current_address, tokens);
+                    break;
+                case R_TYPE:
+                    operands = Operands::get_rtype(tokens);
+                    break;
+                case J_TYPE:
+                    operands =
+                        Operands::get_jtype(labels, current_address, tokens);
+                    break;
+            }
+            unsigned int instruction = opcode_int << 26 | operands;
+
+            output.push_back(std::format("{:08x}", instruction));
+            output.push_back(std::format(" #{}\n", *line));
             current_address += 4;
         }
     }
+
+    for (const auto& line : output) {
+        std::cout << line;
+    }
+
     return 0;
 }
