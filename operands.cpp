@@ -29,12 +29,12 @@ int Operands::get_itype(Labels::labels labels,
         rs = get_register(operands[3]);
         immd = get_immd(labels, operands[4]);
         if (operands[1] == "beq" || operands[1] == "bne") {
-            immd -= current_address + 4;
-            immd /= 4;
+            immd -= current_address + 4; // current_address + 4 = PC
+            immd /= 4; // Ofset is in terms of instructions not bytes
         }
     }
 
-    return (rt & 0x1f) << 16 | (rs & 0x1f) << 21 | (immd & 0xffff);
+    return (rs & 0x1f) << 21 | (rt & 0x1f) << 16 | (immd & 0xffff);
 }
 
 int Operands::get_rtype(std::vector<std::string> operands) {
@@ -44,8 +44,8 @@ int Operands::get_rtype(std::vector<std::string> operands) {
     auto rs = get_register(operands[3]);
     auto rt = get_register(operands[4]);
     // auto shamt = operands[5];
-    // auto funct = operands[6];
-    return rs << 21 | rt << 16 | rd << 11 | funct_code;
+    return (rs & 0x1f) << 21 | (rt & 0x1f) << 16 | (rd & 0x1f) << 11 |
+           (funct_code & 0x2f);
 }
 
 int Operands::get_jtype(Labels::labels labels,
@@ -55,7 +55,7 @@ int Operands::get_jtype(Labels::labels labels,
     if (operands[1] == "halt" || operands[1] == "nop") {
         offset = 0;
     } else {
-        offset = (get_immd(labels, operands[2]) - current_address) & 0x2ffffff;
+        offset = get_immd(labels, operands[2]) >> 2 & 0x2ffffff;
     }
     return offset;
 }
