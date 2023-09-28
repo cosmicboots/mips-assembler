@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 
     {
         // Convert tabs
-        int pos;
+        long unsigned int pos;
         while ((pos = input.find("\t")) != std::string::npos) {
             input[pos] = ' ';
         }
@@ -95,8 +95,7 @@ int main(int argc, char** argv) {
                     operands = Operands::get_rtype(tokens);
                     break;
                 case J_TYPE:
-                    operands =
-                        Operands::get_jtype(labels, current_address, tokens);
+                    operands = Operands::get_jtype(labels, tokens);
                     break;
             }
             unsigned int instruction = opcode_int << 26 | operands;

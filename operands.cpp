@@ -51,7 +51,6 @@ int Operands::get_rtype(std::vector<std::string> operands) {
 }
 
 int Operands::get_jtype(Labels::labels labels,
-                        int current_address,
                         std::vector<std::string> operands) {
     int offset;
     if (operands[1] == "halt" || operands[1] == "nop") {
