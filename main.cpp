@@ -1,5 +1,7 @@
+#include <bit>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -73,9 +75,15 @@ int main(int argc, char** argv) {
 
         if (op.rfind(".", 0) == 0) {
             if (tokens[1] == ".dfill") {
-                long int val = get_immd(labels, tokens[2]);
-                int left = val >> 8 & 0xffffffff;
-                int right = val & 0xffffffff;
+                unsigned long long int val;
+                if (tokens[2].find(".") != std::string::npos) {
+                    double x = std::stod(tokens[2]);
+                    memcpy(&val, &x, 8);
+                } else {
+                    val = get_immd(labels, tokens[2]);
+                }
+                unsigned int left = val >> 32 & 0xffffffff;
+                unsigned int right = val & 0xffffffff;
                 if (current_address % 8 != 0) {
                     current_address += 4;
                     printf("%08x\n", 0);

@@ -6,6 +6,7 @@ if [[ $1 ]]
 then
     src="$(dirname $1)/$(basename "$1" ".hex").asm"
     difft <(./build/main "$src" | awk '{print $1}') <(awk '{print $1}' "$1")
+    ./build/main "$src"
 else
     total=0
     good=0
@@ -23,6 +24,7 @@ else
         fi
         total=$(($total + 1))
     done
-    echo "$good/$total Tests passed"
+    echo " === $good/$total Tests passed ==="
+    echo
 fi
 
