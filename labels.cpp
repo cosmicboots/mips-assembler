@@ -15,16 +15,20 @@ Labels::labels Labels::calculate_labels(std::vector<std::string> lines) {
         }
         auto tokens = split(*line, " ");
 
+        if (tokens[1] == ".dfill" && cur_address % 8 != 0) {
+            cur_address += 4;
+        }
+
         if (tokens[0] != "") {
             // Add label
             labels[tokens[0]] = cur_address;
         }
 
         if (tokens[1] == ".dfill") {
-            cur_address += 8;
-        } else {
             cur_address += 4;
         }
+
+        cur_address += 4;
     }
     return labels;
 }

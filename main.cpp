@@ -76,6 +76,10 @@ int main(int argc, char** argv) {
                 long int val = get_immd(labels, tokens[2]);
                 int left = val >> 8 & 0xffffffff;
                 int right = val & 0xffffffff;
+                if (current_address % 8 != 0) {
+                    current_address += 4;
+                    printf("%08x\n", 0);
+                }
                 printf("%08x", right);
                 std::cout << " #" << *line << std::endl;
                 printf("%08x\n", left);
