@@ -1,6 +1,7 @@
 #!/bin/bash
 
 tests=($(find examples/MA/ -type f -name '*.hex'))
+errTests=($(find examples/MA/ -type f -name 'error*.asm'))
 
 make
 
@@ -13,6 +14,22 @@ then
 else
     total=0
     good=0
+
+    # Check error tests
+    for errTest in "${errTests[@]}"
+    do
+        echo " |=== Checking: [$errTest] ===|"
+        out=$(./build/main "$errTest" 2>/dev/null)
+        if [[ -z "$out" ]]
+        then
+            good=$(($good + 1))
+        else
+            echo "FAILED!"
+        fi
+        total=$(($total + 1))
+    done
+
+    # Check rest of tests
     for test in "${tests[@]}"
     do
         src="$(dirname $test)/$(basename "$test" ".hex").asm"
