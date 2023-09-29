@@ -1,9 +1,10 @@
 #include "labels.h"
 #include <assert.h>
+#include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <map>
 #include <ostream>
-#include <regex>
 #include <string>
 #include <vector>
 #include "utils.h"
@@ -17,9 +18,8 @@ Labels::labels Labels::calculate_labels(std::vector<std::string> lines) {
         }
         auto tokens = split(*line, " ");
 
-        std::regex m("^[a-zA-Z0-9]*$");
-
-        assert(std::regex_match(tokens[0], m));
+        assert(std::count_if(tokens[0].begin(), tokens[0].end(), isalnum) ==
+               tokens[0].length());
         assert(tokens[0].length() <= 12);
 
         if (tokens[1] == ".dfill" && cur_address % 8 != 0) {

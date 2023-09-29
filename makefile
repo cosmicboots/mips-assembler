@@ -2,7 +2,7 @@ SOURCES := $(wildcard *.cpp)
 BUILD = build
 OBJECTS := $(patsubst %.cpp,$(BUILD)/%.o,$(SOURCES))
 CC = g++
-CFLAGS = -g -c -Wall -Wextra -std=c++20
+CFLAGS = -g -c -Wall -Wextra -std=c++11
 
 $(BUILD)/%.o: %.cpp
 	mkdir -p $(BUILD)

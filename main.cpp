@@ -1,8 +1,6 @@
-#include <bit>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <format>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -15,11 +13,13 @@
 #include "utils.h"
 
 int main(int argc, char** argv) {
+    char* x;
     if (argc <= 1) {
         std::cerr << "Pass in a filename" << std::endl;
         exit(1);
     }
-    auto file = std::ifstream(argv[1]);
+    std::ifstream file;
+    file.open(argv[1]);
     std::string input((std::istreambuf_iterator<char>(file)),
                       (std::istreambuf_iterator<char>()));
 
@@ -38,11 +38,11 @@ int main(int argc, char** argv) {
 
     Labels::labels labels = Labels::calculate_labels(lines);
 
-    std::cerr << "Labels:" << std::endl;
-    for (const auto& [k, v] : labels) {
-        std::cerr << "labels[" << k << "] = (" << v << ") " << std::endl;
-    }
-    std::cerr << std::endl;
+    // std::cerr << "Labels:" << std::endl;
+    // for (const auto& [k, v] : labels) {
+    //     std::cerr << "labels[" << k << "] = (" << v << ") " << std::endl;
+    // }
+    // std::cerr << std::endl;
 
     int current_address = 0;
     for (auto line = lines.begin(); line != lines.end(); ++line) {
@@ -73,11 +73,14 @@ int main(int argc, char** argv) {
                 unsigned int right = val & 0xffffffff;
                 if (current_address % 8 != 0) {
                     current_address += 4;
-                    output.push_back(std::format("{:08x}\n", 0));
+                    asprintf(&x, "%08x\n", 0);
+                    output.push_back(x);
                 }
-                output.push_back(std::format("{:08x}", right));
-                output.push_back(std::format(" #{}\n", *line));
-                output.push_back(std::format("{:08x}\n", left));
+                asprintf(&x, "%08x", right);
+                output.push_back(x);
+                output.push_back(" #" + *line + "\n");
+                asprintf(&x, "%08x\n", left);
+                output.push_back(x);
                 current_address += 8;
             }
         } else {
@@ -100,8 +103,9 @@ int main(int argc, char** argv) {
             }
             unsigned int instruction = opcode_int << 26 | operands;
 
-            output.push_back(std::format("{:08x}", instruction));
-            output.push_back(std::format(" #{}\n", *line));
+            asprintf(&x, "%08x", instruction);
+            output.push_back(x);
+            output.push_back(" #" + *line + "\n");
             current_address += 4;
         }
     }

@@ -1,8 +1,8 @@
 #include <assert.h>
 #include <algorithm>
+#include <cctype>
 #include <iostream>
 #include <map>
-#include <regex>
 #include <string>
 #include <vector>
 
@@ -19,8 +19,11 @@ int get_immd(std::map<std::string, int> labels, std::string immd) {
     int ret = 0;
     if (labels.find(immd) == labels.end()) {
         // Label not found
-        std::regex m("^-?[0-9]+$");
-        assert(std::regex_match(immd, m));
+        int count = std::count_if(immd.begin(), immd.end(), isdigit);
+        if (immd.rfind("-") == 0) {
+            count += 1;
+        }
+        assert(count == immd.length());
         ret = std::stoi(immd);
     } else {
         ret = labels[immd];

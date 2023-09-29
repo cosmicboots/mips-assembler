@@ -1,11 +1,9 @@
 #include "operands.h"
 #include <sys/types.h>
-#include <charconv>
 #include <cstdio>
 #include <iostream>
 #include <map>
 #include <string>
-#include <variant>
 #include <vector>
 #include "labels.h"
 #include "opcode.h"
@@ -28,9 +26,8 @@ int Operands::get_itype(Labels::labels labels,
         rt = get_register(operands[2]);
         rs = get_register(operands[3]);
         immd = get_immd(labels, operands[4]);
-        if ((operands[1] == "beq" || operands[1] == "bne")
-            && (labels.find(operands[4]) != labels.end())
-        ) {
+        if ((operands[1] == "beq" || operands[1] == "bne") &&
+            (labels.find(operands[4]) != labels.end())) {
             immd -= current_address + 4;  // current_address + 4 = PC
             immd /= 4;  // Ofset is in terms of instructions not bytes
         }
